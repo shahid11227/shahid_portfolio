@@ -6,6 +6,11 @@ export interface Project {
   summary: string;
   highlights: string[];
   tools: string[];
+  impactBadge?: string;
+  techTags?: {
+    name: string;
+    type: 'core' | 'framework' | 'methodology' | 'database';
+  }[];
   githubUrl?: string;
   liveDemoUrl?: string;
   codeSnippet?: string;
@@ -16,6 +21,8 @@ export interface Project {
     label: string;
     value: string;
     change?: string;
+    trend?: 'up' | 'down' | 'neutral';
+    subtext?: string;
   }[];
   chartType: 'retail-sales' | 'kpi-powerbi' | 'ecommerce-excel' | 'zepto-sql' | 'ai-news-agent' | 'sales-ml-prediction';
 }
