@@ -2,10 +2,12 @@ export interface Project {
   id: string;
   title: string;
   subtitle: string;
-  category: 'Python' | 'Power BI' | 'Excel';
+  category: 'Python' | 'Power BI' | 'Excel' | 'SQL & Analytics' | 'AI & Automation' | 'Machine Learning';
   summary: string;
   highlights: string[];
   tools: string[];
+  githubUrl?: string;
+  liveDemoUrl?: string;
   codeSnippet?: string;
   codeLanguage?: string;
   daxFormula?: string;
@@ -15,7 +17,7 @@ export interface Project {
     value: string;
     change?: string;
   }[];
-  chartType: 'retail-sales' | 'kpi-powerbi' | 'ecommerce-excel';
+  chartType: 'retail-sales' | 'kpi-powerbi' | 'ecommerce-excel' | 'zepto-sql' | 'ai-news-agent' | 'sales-ml-prediction';
 }
 
 export interface SkillItem {

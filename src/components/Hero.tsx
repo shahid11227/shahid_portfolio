@@ -16,7 +16,8 @@ import {
   Copy,
   Sparkles,
   TrendingUp,
-  Award
+  Award,
+  Cpu
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
@@ -57,7 +58,7 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 text-sky-700 dark:text-sky-300 text-xs font-semibold tracking-wide">
               <span className="w-2 h-2 rounded-full bg-sky-500 animate-ping" />
               <Sparkles className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-              <span>Open to Data Analyst & Business Intelligence Roles</span>
+              <span>Open to Data Analyst, BI & Data Science Roles</span>
             </div>
 
             {/* Main Headline */}
@@ -66,7 +67,7 @@ export const Hero: React.FC<HeroProps> = ({
                 Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-blue-600">Shahid Gojree</span>
               </h1>
               <p className="text-xl sm:text-2xl font-semibold text-slate-700 dark:text-slate-300">
-                Data Analyst | Python • SQL • Power BI • Excel
+                Data Analyst | SQL • Python • ML • Power BI • Excel
               </p>
             </div>
 
@@ -110,7 +111,7 @@ export const Hero: React.FC<HeroProps> = ({
                 onClick={() => scrollToSection('projects')}
                 className="px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm flex items-center gap-2 shadow-md shadow-sky-600/25 transition-all hover:translate-y-[-1px]"
               >
-                <span>Explore Interactive Dashboards</span>
+                <span>Explore 6 Projects</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -189,11 +190,11 @@ export const Hero: React.FC<HeroProps> = ({
                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800/80">
                   <div className="flex items-center justify-between text-sky-600 dark:text-sky-400 mb-2">
                     <BarChart3 className="w-5 h-5" />
-                    <span className="text-xs font-semibold text-emerald-500">+100%</span>
+                    <span className="text-xs font-semibold text-emerald-500">6 Projects</span>
                   </div>
-                  <div className="text-2xl font-bold text-slate-900 dark:text-white">3+</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">6</div>
                   <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                    End-to-End Analytics Projects
+                    SQL, ML, AI & BI Projects
                   </div>
                 </div>
 
@@ -201,11 +202,11 @@ export const Hero: React.FC<HeroProps> = ({
                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800/80">
                   <div className="flex items-center justify-between text-indigo-600 dark:text-indigo-400 mb-2">
                     <Database className="w-5 h-5" />
-                    <span className="text-xs font-semibold text-indigo-500">SQL & Python</span>
+                    <span className="text-xs font-semibold text-indigo-500">SQL & ML</span>
                   </div>
-                  <div className="text-2xl font-bold text-slate-900 dark:text-white">4+</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">125k+</div>
                   <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                    Core Analytics Stack Tools
+                    Zepto Orders Analyzed
                   </div>
                 </div>
 
@@ -213,11 +214,11 @@ export const Hero: React.FC<HeroProps> = ({
                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800/80">
                   <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 mb-2">
                     <TrendingUp className="w-5 h-5" />
-                    <span className="text-xs font-semibold text-emerald-500">ILS Certified</span>
+                    <span className="text-xs font-semibold text-emerald-500">ML Forecast</span>
                   </div>
-                  <div className="text-2xl font-bold text-slate-900 dark:text-white">6 Mos</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">94.8%</div>
                   <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                    Data Analyst Trainee Role
+                    Sales Model R² Accuracy
                   </div>
                 </div>
 
@@ -241,11 +242,12 @@ export const Hero: React.FC<HeroProps> = ({
                   Technical Arsenal
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-2.5 py-1 rounded-md bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 text-xs font-mono font-medium">Python (Pandas, NumPy)</span>
-                  <span className="px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-mono font-medium">SQL (MySQL, SQL Server)</span>
+                  <span className="px-2.5 py-1 rounded-md bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 text-xs font-mono font-medium">Python (Pandas, Scikit-Learn)</span>
+                  <span className="px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-mono font-medium">SQL (Window Functions, CTEs)</span>
+                  <span className="px-2.5 py-1 rounded-md bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-xs font-mono font-medium">AI Telegram Agents & Automation</span>
+                  <span className="px-2.5 py-1 rounded-md bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-xs font-mono font-medium">Machine Learning & Regression</span>
                   <span className="px-2.5 py-1 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 text-xs font-mono font-medium">Power BI (DAX)</span>
                   <span className="px-2.5 py-1 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-medium">Excel (PivotTables)</span>
-                  <span className="px-2.5 py-1 rounded-md bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-xs font-mono font-medium">EDA & Cleaning</span>
                 </div>
               </div>
 

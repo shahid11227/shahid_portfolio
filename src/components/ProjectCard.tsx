@@ -12,7 +12,9 @@ import {
   PieChart, 
   Pie, 
   Cell,
-  Legend
+  Legend,
+  LineChart,
+  Line
 } from 'recharts';
 import { 
   Code, 
@@ -20,18 +22,33 @@ import {
   Copy, 
   Check, 
   BarChart2, 
-  TrendingUp, 
   Layers, 
-  ChevronRight,
-  Filter,
-  PieChart as PieIcon,
-  Table
+  Filter, 
+  Table,
+  Github,
+  ExternalLink,
+  Bot,
+  Zap,
+  Sliders,
+  Send,
+  Radio,
+  Clock,
+  Truck,
+  TrendingUp,
+  Brain,
+  Sparkles
 } from 'lucide-react';
 import { Project } from '../types';
 import { 
   RETAIL_CHART_DATA, 
   REGION_PROFIT_DATA, 
-  CATEGORY_BREAKDOWN 
+  CATEGORY_BREAKDOWN,
+  ZEPTO_DARK_STORES,
+  ZEPTO_HOURLY_SURGE,
+  ZEPTO_CATEGORY_GMV,
+  ML_ACTUAL_VS_PREDICTED,
+  ML_FEATURE_IMPORTANCE,
+  AI_AGENT_SAMPLE_DIGESTS
 } from '../data/portfolioData';
 
 interface ProjectCardProps {
@@ -51,34 +68,86 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   // Interactive Controls for Excel Dashboard
   const [excelCategoryFilter, setExcelCategoryFilter] = useState<'All' | 'Tech' | 'Office' | 'Furniture'>('All');
 
+  // Interactive Controls for Zepto SQL Project
+  const [selectedZeptoStore, setSelectedZeptoStore] = useState(ZEPTO_DARK_STORES[0].id);
+  const [zeptoViewMode, setZeptoViewMode] = useState<'hubs' | 'hourly' | 'categories'>('hubs');
+
+  // Interactive Controls for ML Sales Prediction Simulator
+  const [tvSpend, setTvSpend] = useState<number>(45000);
+  const [socialSpend, setSocialSpend] = useState<number>(22000);
+  const [radioSpend, setRadioSpend] = useState<number>(10000);
+  const [storeFootfall, setStoreFootfall] = useState<number>(2400);
+  const [mlViewMode, setMlViewMode] = useState<'simulator' | 'residuals' | 'importance'>('simulator');
+
+  // Interactive Controls for AI News Agent
+  const [activeAiNewsCategoryIndex, setActiveAiNewsCategoryIndex] = useState(0);
+  const [isSimulatingAgent, setIsSimulatingAgent] = useState(false);
+
+  // Dynamic ML Prediction Calculation
+  const predictedSalesRevenue = Math.round(
+    14500 + 
+    (tvSpend * 0.46) + 
+    (socialSpend * 0.68) + 
+    (radioSpend * 0.32) + 
+    (storeFootfall * 9.2)
+  );
+
   const copyCode = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };
 
+  const handleSimulateAgent = () => {
+    setIsSimulatingAgent(true);
+    setTimeout(() => {
+      setIsSimulatingAgent(false);
+    }, 800);
+  };
+
+  const currentStoreData = ZEPTO_DARK_STORES.find(s => s.id === selectedZeptoStore) || ZEPTO_DARK_STORES[0];
+
   return (
-    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-md shadow-slate-200/50 dark:shadow-none overflow-hidden transition-all duration-300 hover:border-sky-500/50">
+    <div id={`project-${project.id}`} className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-md shadow-slate-200/50 dark:shadow-none overflow-hidden transition-all duration-300 hover:border-sky-500/50">
       
       {/* Header Banner */}
       <div className="p-6 md:p-8 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${
-              project.category === 'Python' 
+              project.category === 'SQL & Analytics'
+                ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800'
+                : project.category === 'AI & Automation'
+                ? 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800'
+                : project.category === 'Machine Learning'
+                ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800'
+                : project.category === 'Python' 
                 ? 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-200 dark:border-sky-800' 
                 : project.category === 'Power BI'
                 ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                 : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
             }`}>
-              {project.category} Project
+              {project.category}
             </span>
-            <span className="text-xs font-mono text-slate-400">ID: {project.id}</span>
+
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 dark:bg-slate-800 text-white text-xs font-semibold hover:bg-slate-800 dark:hover:bg-slate-700 transition-colors shadow-xs"
+              >
+                <Github className="w-3.5 h-3.5" />
+                <span>GitHub Repo</span>
+                <ExternalLink className="w-3 h-3 text-slate-400" />
+              </a>
+            )}
           </div>
 
           {/* Navigation View Tabs */}
           <div className="flex items-center p-1 rounded-xl bg-slate-200/70 dark:bg-slate-800 text-xs font-medium">
             <button
+              id={`tab-visual-${project.id}`}
               onClick={() => setActiveTab('visual')}
               className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
                 activeTab === 'visual'
@@ -87,9 +156,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               }`}
             >
               <BarChart2 className="w-3.5 h-3.5" />
-              <span>Interactive Dashboard</span>
+              <span>Interactive View</span>
             </button>
             <button
+              id={`tab-code-${project.id}`}
               onClick={() => setActiveTab('code')}
               className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
                 activeTab === 'code'
@@ -98,9 +168,18 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               }`}
             >
               <Code className="w-3.5 h-3.5" />
-              <span>{project.category === 'Python' ? 'Python EDA Code' : project.category === 'Power BI' ? 'DAX Formula' : 'Excel Formulas'}</span>
+              <span>
+                {project.codeLanguage === 'sql' 
+                  ? 'SQL Logic' 
+                  : project.category === 'Power BI' 
+                  ? 'DAX Formula' 
+                  : project.category === 'Excel' 
+                  ? 'Excel Formulas' 
+                  : 'Python Code'}
+              </span>
             </button>
             <button
+              id={`tab-insights-${project.id}`}
               onClick={() => setActiveTab('insights')}
               className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
                 activeTab === 'insights'
@@ -142,7 +221,412 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         {activeTab === 'visual' && (
           <div className="space-y-6">
             
-            {/* 1. Super Store Analysis Chart */}
+            {/* 1. ZEPTO QUICK COMMERCE SQL ANALYTICS */}
+            {project.chartType === 'zepto-sql' && (
+              <div className="space-y-5">
+                <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+                  <div className="flex items-center gap-2">
+                    <Truck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Logistics Dimension:</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-xs font-semibold">
+                    <button
+                      onClick={() => setZeptoViewMode('hubs')}
+                      className={`px-3 py-1 rounded-lg transition-colors ${
+                        zeptoViewMode === 'hubs'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
+                      }`}
+                    >
+                      Dark Store Hubs
+                    </button>
+                    <button
+                      onClick={() => setZeptoViewMode('hourly')}
+                      className={`px-3 py-1 rounded-lg transition-colors ${
+                        zeptoViewMode === 'hourly'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
+                      }`}
+                    >
+                      Hourly Order Surge
+                    </button>
+                    <button
+                      onClick={() => setZeptoViewMode('categories')}
+                      className={`px-3 py-1 rounded-lg transition-colors ${
+                        zeptoViewMode === 'categories'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
+                      }`}
+                    >
+                      Category GMV Share
+                    </button>
+                  </div>
+                </div>
+
+                {/* Zepto Hub Selector & Metric Preview */}
+                {zeptoViewMode === 'hubs' && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                      {ZEPTO_DARK_STORES.map((store) => (
+                        <button
+                          key={store.id}
+                          onClick={() => setSelectedZeptoStore(store.id)}
+                          className={`p-2.5 rounded-xl border text-left transition-all ${
+                            selectedZeptoStore === store.id
+                              ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-500 text-indigo-900 dark:text-indigo-200 ring-2 ring-indigo-500/20'
+                              : 'bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                          }`}
+                        >
+                          <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate">{store.city}</div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white truncate">{store.name}</div>
+                          <div className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold mt-1">{store.slaRate}% SLA</div>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 p-4 rounded-xl bg-slate-900 text-white border border-slate-800">
+                      <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
+                        <div className="text-xs text-slate-400">Selected Hub</div>
+                        <div className="text-base font-bold text-white mt-0.5">{currentStoreData.name}</div>
+                        <div className="text-xs text-indigo-400 mt-1">{currentStoreData.city} Cluster</div>
+                      </div>
+                      <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
+                        <div className="text-xs text-slate-400">10-Min SLA Adherence</div>
+                        <div className="text-xl font-extrabold text-emerald-400 mt-0.5">{currentStoreData.slaRate}%</div>
+                        <div className="text-xs text-slate-400 mt-1">Avg {currentStoreData.avgTime} mins delivery</div>
+                      </div>
+                      <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
+                        <div className="text-xs text-slate-400">Total Fulfilled Orders</div>
+                        <div className="text-xl font-extrabold text-white mt-0.5">{currentStoreData.orders.toLocaleString()}</div>
+                        <div className="text-xs text-slate-400 mt-1">Net GMV: {currentStoreData.gmv}</div>
+                      </div>
+                      <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
+                        <div className="text-xs text-slate-400">Top Velocity Category</div>
+                        <div className="text-base font-bold text-amber-300 mt-0.5">{currentStoreData.topCategory}</div>
+                        <div className="text-xs text-slate-400 mt-1">Highest re-order rate</div>
+                      </div>
+                    </div>
+
+                    <div className="h-60 w-full pt-2">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={ZEPTO_DARK_STORES} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#94a3b833" />
+                          <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
+                          <YAxis stroke="#64748b" fontSize={11} domain={[85, 100]} tickFormatter={(v) => `${v}%`} />
+                          <Tooltip formatter={(val: any) => [`${val}%`, '10-Min SLA Rate']} />
+                          <Bar dataKey="slaRate" fill="#6366f1" radius={[4, 4, 0, 0]} name="10-Min SLA %" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                )}
+
+                {/* Hourly Surge Curve */}
+                {zeptoViewMode === 'hourly' && (
+                  <div className="space-y-3">
+                    <div className="text-xs text-slate-500 dark:text-slate-400">
+                      Peak order surges occur during morning breakfast hours (8-10 AM) and evening dinner/late-night hours (8-10 PM).
+                    </div>
+                    <div className="h-64 w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={ZEPTO_HOURLY_SURGE} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                          <defs>
+                            <linearGradient id="orderGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8}/>
+                              <stop offset="95%" stopColor="#6366f1" stopOpacity={0.1}/>
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#94a3b833" />
+                          <XAxis dataKey="hour" stroke="#64748b" fontSize={12} />
+                          <YAxis stroke="#64748b" fontSize={12} />
+                          <Tooltip formatter={(val: any) => [`${val} orders`, 'Hourly Volume']} />
+                          <Area type="monotone" dataKey="orders" stroke="#6366f1" fillOpacity={1} fill="url(#orderGrad)" name="Order Volume" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                )}
+
+                {/* Category GMV Share */}
+                {zeptoViewMode === 'categories' && (
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={ZEPTO_CATEGORY_GMV}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={true}
+                          label={({ name, gmv }) => `${name} (${gmv}%)`}
+                          outerRadius={85}
+                          fill="#8884d8"
+                          dataKey="gmv"
+                        >
+                          {ZEPTO_CATEGORY_GMV.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(val: any) => [`${val}%`, 'GMV Share']} />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 2. AI NEWS TELEGRAM AGENT */}
+            {project.chartType === 'ai-news-agent' && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-xl bg-slate-900 text-white space-y-4 border border-slate-800">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                    <div className="flex items-center gap-2">
+                      <Bot className="w-4 h-4 text-purple-400" />
+                      <span className="text-xs font-bold text-slate-200">Telegram Channel Broadcast Simulator (@AINewsRadar)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleSimulateAgent}
+                        disabled={isSimulatingAgent}
+                        className="px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                      >
+                        <Sparkles className={`w-3.5 h-3.5 ${isSimulatingAgent ? 'animate-spin' : ''}`} />
+                        <span>{isSimulatingAgent ? 'Ingesting & Summarizing...' : 'Simulate Live Ingestion'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Channel Topics Selector */}
+                  <div className="flex flex-wrap gap-2">
+                    {AI_AGENT_SAMPLE_DIGESTS.map((item, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveAiNewsCategoryIndex(idx)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                          activeAiNewsCategoryIndex === idx
+                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500'
+                            : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'
+                        }`}
+                      >
+                        {item.category}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Simulated Telegram Message Bubble */}
+                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 font-sans">
+                    <div className="flex items-center justify-between text-xs text-slate-400 border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-[10px]">
+                          AI
+                        </div>
+                        <span className="font-semibold text-white">AI News Radar Agent</span>
+                        <span className="px-1.5 py-0.5 rounded bg-purple-950 text-purple-300 text-[10px] font-mono">BOT</span>
+                      </div>
+                      <span className="text-[11px] font-mono text-slate-400">{AI_AGENT_SAMPLE_DIGESTS[activeAiNewsCategoryIndex].timestamp}</span>
+                    </div>
+
+                    <div className="space-y-2 text-xs">
+                      <div className="text-purple-300 font-bold uppercase tracking-wider text-[11px]">
+                        📰 BREAKING AI DISPATCH • {AI_AGENT_SAMPLE_DIGESTS[activeAiNewsCategoryIndex].category}
+                      </div>
+                      <div className="text-slate-300 font-semibold text-sm">
+                        "{AI_AGENT_SAMPLE_DIGESTS[activeAiNewsCategoryIndex].rawHeadline}"
+                      </div>
+                      <div className="text-[11px] text-slate-400 font-mono">
+                        Source: {AI_AGENT_SAMPLE_DIGESTS[activeAiNewsCategoryIndex].source}
+                      </div>
+
+                      <div className="space-y-1.5 pt-2 border-t border-slate-900">
+                        {AI_AGENT_SAMPLE_DIGESTS[activeAiNewsCategoryIndex].summaryBullets.map((bullet, bIdx) => (
+                          <div key={bIdx} className="text-slate-200 leading-relaxed font-sans">
+                            {bullet}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="pt-2 text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
+                        <Check className="w-3 h-3" />
+                        <span>{AI_AGENT_SAMPLE_DIGESTS[activeAiNewsCategoryIndex].status}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 3. MACHINE LEARNING SALES PREDICTION SIMULATOR */}
+            {project.chartType === 'sales-ml-prediction' && (
+              <div className="space-y-5">
+                <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+                  <div className="flex items-center gap-2">
+                    <Sliders className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200">ML Model Tools:</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-xs font-semibold">
+                    <button
+                      onClick={() => setMlViewMode('simulator')}
+                      className={`px-3 py-1 rounded-lg transition-colors ${
+                        mlViewMode === 'simulator'
+                          ? 'bg-cyan-600 text-white'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
+                      }`}
+                    >
+                      What-If Revenue Simulator
+                    </button>
+                    <button
+                      onClick={() => setMlViewMode('residuals')}
+                      className={`px-3 py-1 rounded-lg transition-colors ${
+                        mlViewMode === 'residuals'
+                          ? 'bg-cyan-600 text-white'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
+                      }`}
+                    >
+                      Actual vs Predicted
+                    </button>
+                    <button
+                      onClick={() => setMlViewMode('importance')}
+                      className={`px-3 py-1 rounded-lg transition-colors ${
+                        mlViewMode === 'importance'
+                          ? 'bg-cyan-600 text-white'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
+                      }`}
+                    >
+                      Feature Importance
+                    </button>
+                  </div>
+                </div>
+
+                {/* Simulator Mode */}
+                {mlViewMode === 'simulator' && (
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-slate-900 text-white border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+                      <div>
+                        <div className="text-xs text-slate-400 font-medium">ML Model Predicted Monthly Revenue</div>
+                        <div className="text-3xl font-black text-cyan-400 mt-1">
+                          ${predictedSalesRevenue.toLocaleString()}
+                        </div>
+                        <div className="text-xs text-emerald-400 font-semibold mt-1">
+                          Based on Random Forest Regressor (R² = 94.8%)
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 text-xs">
+                        <div className="p-2.5 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
+                          <span className="text-slate-400 block text-[10px]">Confidence Level</span>
+                          <span className="font-bold text-white">95.0% Interval</span>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">
+                          <span className="text-slate-400 block text-[10px]">Model Error (MAE)</span>
+                          <span className="font-bold text-emerald-400">± 4.2%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Interactive Feature Sliders */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div className="flex justify-between text-xs font-semibold">
+                          <span className="text-slate-700 dark:text-slate-200">TV Advertising Spend</span>
+                          <span className="text-cyan-600 dark:text-cyan-400 font-mono">${tvSpend.toLocaleString()}</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="100000"
+                          step="5000"
+                          value={tvSpend}
+                          onChange={(e) => setTvSpend(Number(e.target.value))}
+                          className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-600"
+                        />
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div className="flex justify-between text-xs font-semibold">
+                          <span className="text-slate-700 dark:text-slate-200">Social Media Ad Spend</span>
+                          <span className="text-cyan-600 dark:text-cyan-400 font-mono">${socialSpend.toLocaleString()}</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="50000"
+                          step="2500"
+                          value={socialSpend}
+                          onChange={(e) => setSocialSpend(Number(e.target.value))}
+                          className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-600"
+                        />
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div className="flex justify-between text-xs font-semibold">
+                          <span className="text-slate-700 dark:text-slate-200">Radio Ad Promotions</span>
+                          <span className="text-cyan-600 dark:text-cyan-400 font-mono">${radioSpend.toLocaleString()}</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="30000"
+                          step="1000"
+                          value={radioSpend}
+                          onChange={(e) => setRadioSpend(Number(e.target.value))}
+                          className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-600"
+                        />
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                        <div className="flex justify-between text-xs font-semibold">
+                          <span className="text-slate-700 dark:text-slate-200">Store Footfall (Customers/Day)</span>
+                          <span className="text-cyan-600 dark:text-cyan-400 font-mono">{storeFootfall.toLocaleString()} visitors</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="500"
+                          max="5000"
+                          step="100"
+                          value={storeFootfall}
+                          onChange={(e) => setStoreFootfall(Number(e.target.value))}
+                          className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Residuals View */}
+                {mlViewMode === 'residuals' && (
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={ML_ACTUAL_VS_PREDICTED} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#94a3b833" />
+                        <XAxis dataKey="testSample" stroke="#64748b" fontSize={12} />
+                        <YAxis stroke="#64748b" fontSize={12} tickFormatter={(val) => `$${val}k`} />
+                        <Tooltip formatter={(val: any) => [`$${val}k`, '']} />
+                        <Legend />
+                        <Line type="monotone" dataKey="actual" stroke="#0284c7" strokeWidth={2} name="Actual Revenue ($k)" />
+                        <Line type="monotone" dataKey="predicted" stroke="#10b981" strokeWidth={2} strokeDasharray="5 5" name="ML Predicted Revenue ($k)" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+
+                {/* Feature Importance View */}
+                {mlViewMode === 'importance' && (
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={ML_FEATURE_IMPORTANCE} layout="vertical" margin={{ top: 10, right: 20, left: 40, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#94a3b833" />
+                        <XAxis type="number" stroke="#64748b" fontSize={12} tickFormatter={(v) => `${v}%`} />
+                        <YAxis type="category" dataKey="feature" stroke="#64748b" fontSize={11} width={110} />
+                        <Tooltip formatter={(val: any) => [`${val}%`, 'Relative Importance']} />
+                        <Bar dataKey="importance" fill="#06b6d4" radius={[0, 4, 4, 0]} name="Feature Weight %" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 4. Super Store Analysis Chart */}
             {project.chartType === 'retail-sales' && (
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
@@ -247,7 +731,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               </div>
             )}
 
-            {/* 2. Power BI Sales Dashboard */}
+            {/* 5. Power BI Sales Dashboard */}
             {project.chartType === 'kpi-powerbi' && (
               <div className="space-y-4">
                 <div className="p-4 rounded-xl bg-slate-900 text-white space-y-4 border border-slate-800">
@@ -323,7 +807,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               </div>
             )}
 
-            {/* 3. Excel E-Commerce Sales Performance Dashboard */}
+            {/* 6. Excel E-Commerce Sales Performance Dashboard */}
             {project.chartType === 'ecommerce-excel' && (
               <div className="space-y-4">
                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-4">
@@ -384,7 +868,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         {activeTab === 'code' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
-              <span>{project.category === 'Python' ? 'superstore_eda.py' : project.category === 'Power BI' ? 'Sales_Measures.dax' : 'Excel_Formulas.xlsx'}</span>
+              <span>
+                {project.codeLanguage === 'sql' 
+                  ? `${project.id}.sql` 
+                  : project.category === 'Power BI' 
+                  ? 'Sales_Measures.dax' 
+                  : project.category === 'Excel' 
+                  ? 'Excel_Formulas.xlsx' 
+                  : `${project.id}.py`}
+              </span>
               <button
                 onClick={() => copyCode(project.codeSnippet || project.daxFormula || (project.excelFormulas || []).join('\n'))}
                 className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors text-xs font-semibold"

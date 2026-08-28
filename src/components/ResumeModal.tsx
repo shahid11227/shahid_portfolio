@@ -18,7 +18,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
 
   const fullTextResume = `
 SHAHID AHMAD SHEER GOJREE
-Data Analyst
+Data Analyst | Machine Learning & Automation
 Phone: +91 8899664652 | Email: shahidgojree880@gmail.com
 LinkedIn: ${PERSONAL_INFO.linkedin} | GitHub: ${PERSONAL_INFO.github}
 
@@ -27,12 +27,13 @@ EDUCATION
 • Data Science Certification (Python, SQL, Power BI, ML, AI) — ILS Institutions, Srinagar, J&K, India | Aug 2025 – Present
 
 SKILL SUMMARY
-• Programming: Python (Pandas, NumPy, Matplotlib, Seaborn), SQL
-• Data Visualization: Power BI, Excel (Pivot Tables, Charts, Dashboards)
-• Database Management: MySQL, SQL Server
-• Data Analysis: Data Cleaning, EDA, Data Transformation
-• Analytical Skills: Data Interpretation, Problem Solving, Statistical Analysis, KPI & Metrics Analysis
-• Business Skills: Business Analysis, Stakeholder Communication, Decision-Making Support
+• Programming & ML: Python (Pandas, NumPy, Matplotlib, Seaborn, Scikit-Learn, XGBoost), SQL
+• Data Visualization: Power BI (DAX, Modeling), Excel (Pivot Tables, Dynamic Dashboards)
+• AI & Automation: Telegram Bot API, Asyncio, LLM Prompt Engineering, Web Scraping & Ingestion
+• Database Management: MySQL, PostgreSQL, SQL Server
+• Data Analysis: Data Cleaning, EDA, Feature Engineering, Regression Modeling, RFM Analysis
+• Analytical Skills: Data Interpretation, Problem Solving, Statistical Analysis, KPI Metrics
+• Business Skills: Business Analysis, Supply Chain Logistics, Stakeholder Communication, Decision Support
 
 WORK EXPERIENCE
 Data Analyst Trainee — ILS Institution, Srinagar, J&K, India | Aug 2025 – Jan 2026
@@ -41,26 +42,35 @@ Data Analyst Trainee — ILS Institution, Srinagar, J&K, India | Aug 2025 – Ja
 • Built Excel dashboards using Pivot Tables and charts to track key performance metrics.
 • Created Power BI dashboards with KPI metrics and basic DAX measures for data-driven insights.
 
-PROJECTS
-1. Super Store Analysis (Python)
-• Conducted EDA on retail data using Python (Pandas, Matplotlib) to uncover key sales and profit trends.
-• Analyzed regions, categories, and customer segments to identify high- and low-performing products.
-• Generated actionable insights by highlighting profit improvement opportunities and region-wise performance.
+KEY PROJECTS
+1. Zepto Quick Commerce SQL Analytics (SQL & Hyperlocal Logistics)
+• Conducted comprehensive SQL analytics on 125,000+ grocery quick-commerce delivery logs.
+• Evaluated 10-minute delivery SLA adherence (94.2% overall) across 15 dark store hubs and isolated delivery bottleneck times.
+• Segmented customer purchasing frequency (RFM Analysis) identifying top 18% repeat cohorts generating 62% of GMV.
 
-2. Sales Dashboard (Power BI)
-• Designed an interactive Power BI dashboard to track key sales KPIs and performance metrics.
-• Analyzed sales trends and category performance to identify business opportunities.
-• Delivered actionable insights through clear and visually optimized data visualizations.
+2. AI News Telegram Agent (Python, LLMs & Automation)
+• Constructed an automated end-to-end AI intelligence agent that ingests breaking AI news from ArXiv, TechCrunch, and HackerNews.
+• Implemented semantic deduplication using vector embeddings, eliminating 85% duplicate news noise.
+• Built structured prompt engineering with Gemini/LLM APIs to produce concise 3-bullet executive digests and broadcast updates.
 
-3. E-Commerce Sales Performance Dashboard (Excel)
-• Developed a dynamic Excel dashboard to track sales performance, profit margin, and key business metrics.
-• Utilized advanced Excel functions and PivotTables for data analysis and YoY growth calculation.
-• Created interactive visualizations including charts and maps to analyze sales trends and regional performance.
+3. Retail Sales & Revenue Prediction (Machine Learning & Regression)
+• Built predictive regression models forecasting multi-channel retail sales based on advertising investments and seasonality.
+• Preprocessed data with IQR outlier detection and engineered lag/moving average interaction variables.
+• Achieved 94.8% R² score with 4.2% Mean Absolute Error (MAE) through 5-fold cross-validation.
+
+4. Super Store Analysis (Python & EDA)
+• Conducted EDA on retail data using Python (Pandas, Matplotlib) to uncover key sales and profit trends across 4 geographic regions.
+• Identified high- and low-performing product sub-categories and isolated profit margin leakage points.
+
+5. Sales Dashboard (Power BI & DAX)
+• Designed an interactive Power BI dashboard tracking revenue, order count, and YoY sales performance with custom DAX measures.
+
+6. E-Commerce Sales Performance Dashboard (Excel & PivotTables)
+• Developed an automated Excel dashboard leveraging PivotTables, Slicers, and advanced lookup formulas.
 
 CERTIFICATES
 Data Analysis Trainee Program — ILS Institutions
-• Completed a Data Analysis Trainee Program, gaining hands-on experience in core Data Analysis.
-• Applied Python, SQL, Excel, and Power BI to analyze data and build KPI dashboards for business insights; demonstrated strong analytical and problem-solving skills, currently training in Machine Learning & AI.
+• Completed intensive hands-on training in core Data Analysis, Python, SQL, Excel, Power BI, DAX, Machine Learning, and AI.
   `;
 
   const handleCopyText = () => {
@@ -119,7 +129,7 @@ Data Analysis Trainee Program — ILS Institutions
               Shahid Ahmad Sheer Gojree
             </h1>
             <p className="text-base font-semibold text-sky-600 dark:text-sky-400">
-              Data Analyst
+              Data Analyst | Machine Learning & Automation
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-600 dark:text-slate-400 font-medium">
               <span>{PERSONAL_INFO.phone}</span>
@@ -157,12 +167,12 @@ Data Analysis Trainee Program — ILS Institutions
               Skill Summary
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              <div><strong className="font-semibold">Programming:</strong> Python (Pandas, NumPy, Matplotlib, Seaborn), SQL</div>
-              <div><strong className="font-semibold">Data Visualization:</strong> Power BI, Excel (Pivot Tables, Charts, Dashboards)</div>
-              <div><strong className="font-semibold">Database Management:</strong> MySQL, SQL Server</div>
-              <div><strong className="font-semibold">Data Analysis:</strong> Data Cleaning, EDA, Data Transformation</div>
-              <div><strong className="font-semibold">Analytical Skills:</strong> Data Interpretation, Problem Solving, Statistical Analysis, KPI Metrics</div>
-              <div><strong className="font-semibold">Business Skills:</strong> Business Analysis, Stakeholder Communication, Decision Support</div>
+              <div><strong className="font-semibold">Programming & ML:</strong> Python (Pandas, NumPy, Scikit-Learn, XGBoost), SQL</div>
+              <div><strong className="font-semibold">Data Visualization:</strong> Power BI (DAX), Excel (PivotTables, Dashboards)</div>
+              <div><strong className="font-semibold">AI & Automation:</strong> Telegram Bot API, Asyncio, Prompt Engineering, RSS & Scraping</div>
+              <div><strong className="font-semibold">Database Management:</strong> MySQL, PostgreSQL, SQL Server</div>
+              <div><strong className="font-semibold">Analytical Skills:</strong> EDA, Feature Engineering, Regression Modeling, RFM Analysis</div>
+              <div><strong className="font-semibold">Business Skills:</strong> Supply Chain Analytics, Stakeholder Communication, Decision Support</div>
             </div>
           </div>
 
@@ -189,7 +199,7 @@ Data Analysis Trainee Program — ILS Institutions
           {/* Projects */}
           <div className="space-y-3">
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white border-b-2 border-slate-900 dark:border-slate-100 pb-1">
-              Projects
+              Key Projects
             </h2>
             {PROJECTS_DATA.map((proj, idx) => (
               <div key={idx} className="space-y-1 text-xs">

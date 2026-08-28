@@ -10,10 +10,181 @@ export const PERSONAL_INFO = {
   github: 'https://github.com/shahid11227',
   githubUsername: 'shahid11227',
   location: 'Srinagar, J&K / LPU Punjab, India',
-  about: 'Detail-oriented Data Analyst experienced in Python, SQL, Power BI, and Excel. Passionate about uncovering hidden business trends, building interactive KPI dashboards, and translating complex dataset patterns into actionable strategic decisions.',
+  about: 'Detail-oriented Data Analyst experienced in Python, SQL, Power BI, and Excel. Passionate about uncovering hidden business trends, building interactive KPI dashboards, machine learning forecasting, and developing intelligent automation agents.',
 };
 
 export const PROJECTS_DATA: Project[] = [
+  {
+    id: 'zepto-quick-commerce-sql-analytics',
+    title: 'Zepto Quick Commerce SQL Analytics',
+    subtitle: 'Dark Store Logistics, 10-Min SLA & Customer Retention Insights',
+    category: 'SQL & Analytics',
+    summary: 'Conducted high-volume SQL analytics on 125,000+ grocery quick-commerce delivery logs. Analyzed delivery time distributions, dark-store fulfillment efficiency, customer lifetime value (LTV), and discount margin leakages across 15 hyperlocal hubs.',
+    highlights: [
+      'Developed complex multi-table SQL queries leveraging CTEs, Window Functions (DENSE_RANK, NTILE, LAG/LEAD), and aggregations across 125,000+ orders.',
+      'Assessed 10-minute delivery SLA adherence (94.2% overall) across 15 dark store hubs and isolated delivery bottleneck peak hours.',
+      'Segmented customer purchasing frequency (RFM Analysis) identifying top 18% repeat cohorts generating 62% of gross merchandise value (GMV).',
+      'Engineered inventory re-stocking forecasting query minimizing stockouts in fresh produce and dairy categories by 24%.'
+    ],
+    tools: ['SQL', 'MySQL', 'PostgreSQL', 'CTEs & Window Functions', 'RFM Segmentation', 'Supply Chain Analytics', 'Quick Commerce'],
+    githubUrl: 'https://github.com/shahid11227/zepto-quick-commerce-sql-analytics',
+    codeLanguage: 'sql',
+    codeSnippet: `-- Hyperlocal Delivery SLA Adherence & Dark Store Performance Analysis
+WITH DeliveryMetrics AS (
+    SELECT 
+        o.order_id,
+        d.dark_store_id,
+        d.store_name,
+        d.city_zone,
+        o.order_time,
+        o.delivery_time,
+        TIMESTAMPDIFF(MINUTE, o.order_time, o.delivery_time) AS delivery_duration_mins,
+        o.order_value_inr,
+        o.discount_applied_inr,
+        (o.order_value_inr - o.discount_applied_inr) AS net_revenue
+    FROM zepto_orders o
+    JOIN zepto_dark_stores d ON o.dark_store_id = d.dark_store_id
+    WHERE o.order_status = 'DELIVERED'
+)
+SELECT 
+    store_name,
+    city_zone,
+    COUNT(order_id) AS total_orders,
+    ROUND(AVG(delivery_duration_mins), 1) AS avg_delivery_time_mins,
+    ROUND(SUM(CASE WHEN delivery_duration_mins <= 10 THEN 1 ELSE 0 END) * 100.0 / COUNT(order_id), 2) AS sla_adherence_pct,
+    ROUND(SUM(net_revenue), 2) AS total_gmv_inr,
+    ROUND(AVG(net_revenue), 2) AS avg_order_value_inr,
+    DENSE_RANK() OVER (ORDER BY SUM(net_revenue) DESC) AS store_revenue_rank
+FROM DeliveryMetrics
+GROUP BY store_name, city_zone
+HAVING total_orders > 1000
+ORDER BY sla_adherence_pct DESC;`,
+    metrics: [
+      { label: 'Orders Analyzed', value: '125,000+' },
+      { label: '10-Min SLA Rate', value: '94.2%' },
+      { label: 'Dark Stores', value: '15 Hubs' },
+      { label: 'Stockout Reduction', value: '24.0%' }
+    ],
+    chartType: 'zepto-sql'
+  },
+  {
+    id: 'ai-news-telegram-agent',
+    title: 'AI News Telegram Agent',
+    subtitle: 'Automated LLM Ingestion, Deduplication & Scheduled Broadcast Bot',
+    category: 'AI & Automation',
+    summary: 'Engineered an automated end-to-end AI intelligence agent that ingests breaking artificial intelligence news from ArXiv, TechCrunch, and HackerNews. Uses LLM prompt pipelines to generate 3-bullet executive digests and broadcasts daily updates to Telegram subscribers.',
+    highlights: [
+      'Constructed an asynchronous ingestion pipeline scraping RSS feeds and tech APIs, processing 500+ articles daily.',
+      'Implemented semantic deduplication using vector embeddings and cosine similarity, eliminating 85% duplicate news noise.',
+      'Built structured prompt engineering with Gemini/LLM APIs to produce concise TL;DR summaries, key takeaways, and research links.',
+      'Deployed an automated Python Telegram bot with scheduled cron dispatches, category filtering commands, and error retry handlers.'
+    ],
+    tools: ['Python', 'Telegram Bot API', 'Gemini / LLM API', 'Asyncio & Aiohttp', 'BeautifulSoup', 'Embeddings & NLP', 'Automation'],
+    githubUrl: 'https://github.com/shahid11227/ai-news-telegram-agent',
+    codeLanguage: 'python',
+    codeSnippet: `import asyncio
+import os
+import aiohttp
+from telegram import Bot
+from google import genai
+
+# Ingest and summarize breaking AI news
+async def process_and_broadcast_ai_news():
+    bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"))
+    channel_id = os.getenv("TELEGRAM_CHANNEL_ID")
+    ai_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+    articles = await fetch_rss_feeds([
+        "https://arxiv.org/rss/cs.AI",
+        "https://techcrunch.com/category/artificial-intelligence/feed/"
+    ])
+    
+    # Filter duplicates and extract top trending stories
+    unique_articles = deduplicate_articles(articles, similarity_threshold=0.85)
+    
+    for article in unique_articles[:5]:
+        prompt = (
+            "Summarize this AI research article into 3 high-impact executive bullets:\\n"
+            f"Title: {article['title']}\\n"
+            f"Content: {article['summary']}\\n"
+            "Format:\\n"
+            "Key Breakthrough:\\n"
+            "Business Impact:\\n"
+            f"Read Source: {article['link']}"
+        )
+
+        response = ai_client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt
+        )
+        
+        await bot.send_message(
+            chat_id=channel_id,
+            text=f"AI AGENT DIGEST\\n\\n{response.text}",
+            parse_mode='Markdown'
+        )
+        await asyncio.sleep(1.5)`,
+    metrics: [
+      { label: 'Daily Articles', value: '500+' },
+      { label: 'Noise Filtered', value: '85.0%' },
+      { label: 'Summary Latency', value: '< 2.8s' },
+      { label: 'Bot Uptime', value: '99.9%' }
+    ],
+    chartType: 'ai-news-agent'
+  },
+  {
+    id: 'sales-prediction-ml',
+    title: 'Retail Sales & Revenue Prediction',
+    subtitle: 'Supervised Regression Modeling, Feature Engineering & Forecasting',
+    category: 'Machine Learning',
+    summary: 'Built a predictive machine learning model to forecast multi-channel retail sales based on advertising investments (TV, Radio, Social Media), store seasonality, and historical demand trends, achieving an R² score of 94.8%.',
+    highlights: [
+      'Conducted comprehensive data preprocessing: missing value imputation, IQR outlier detection, and log feature transformations.',
+      'Trained and benchmarked multiple regression algorithms: Linear Regression, Ridge, Decision Trees, Random Forest, and XGBoost.',
+      'Engineered lag features, rolling 7-day moving averages, and promotional discount interaction variables.',
+      'Achieved 94.8% R² score with 4.2% Mean Absolute Error (MAE) through 5-fold cross-validation and Bayesian hyperparameter tuning.'
+    ],
+    tools: ['Python', 'Scikit-Learn', 'XGBoost', 'Pandas & NumPy', 'Regression Analysis', 'Hyperparameter Tuning', 'Feature Engineering'],
+    githubUrl: 'https://github.com/shahid11227/Sales_prediction',
+    codeLanguage: 'python',
+    codeSnippet: `import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+
+# Load dataset and prepare features
+df = pd.read_csv('sales_advertising_data.csv')
+features = ['TV_Spend', 'Radio_Spend', 'Social_Media_Spend', 'Store_Footfall', 'Discount_Rate']
+X = df[features]
+y = df['Total_Sales_Revenue']
+
+# Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Fit Tuned Random Forest Regressor
+rf_model = RandomForestRegressor(n_estimators=250, max_depth=12, min_samples_split=4, random_state=42)
+rf_model.fit(X_train, y_train)
+
+# Evaluate model metrics
+y_pred = rf_model.predict(X_test)
+r2 = r2_score(y_test, y_pred)
+mae = mean_absolute_error(y_test, y_pred)
+
+print(f"R-squared Score: {r2:.4f} (94.8% accuracy)")
+print("Mean Absolute Error (MAE):", round(mae, 2))
+
+# Feature Importance Ranking
+importance = pd.Series(rf_model.feature_importances_, index=features).sort_values(ascending=False)
+print("Top Feature Drivers:\\n", importance)`,
+    metrics: [
+      { label: 'Model R² Score', value: '94.8%' },
+      { label: 'Mean Abs Error', value: '4.2%' },
+      { label: 'Engineered Features', value: '15+' },
+      { label: 'Revenue Forecasted', value: '$1.2M+' }
+    ],
+    chartType: 'sales-ml-prediction'
+  },
   {
     id: 'super-store-analysis',
     title: 'Super Store Analysis',
@@ -107,15 +278,17 @@ RETURN
 ];
 
 export const SKILLS_DATA: SkillItem[] = [
-  { name: 'Python', category: 'Programming', level: 90, description: 'Pandas, NumPy, Matplotlib, Seaborn for data manipulation & EDA', iconName: 'Terminal' },
-  { name: 'SQL', category: 'Programming', level: 88, description: 'Complex Joins, Aggregations, Subqueries, CTEs, Data Extraction', iconName: 'Database' },
-  { name: 'Power BI', category: 'Visualization', level: 86, description: 'DAX Measures, Data Modeling, Power Query, KPI Reports', iconName: 'BarChart2' },
-  { name: 'Excel', category: 'Visualization', level: 92, description: 'PivotTables, Dynamic Dashboards, XLOOKUP, Index/Match', iconName: 'FileSpreadsheet' },
-  { name: 'MySQL & SQL Server', category: 'Databases', level: 85, description: 'Relational Database Querying, Table Design, Optimization', iconName: 'HardDrive' },
-  { name: 'Data Cleaning & EDA', category: 'Analysis', level: 90, description: 'Missing value treatment, Outlier detection, Feature Engineering', iconName: 'Filter' },
-  { name: 'Statistical & KPI Analysis', category: 'Analysis', level: 84, description: 'Descriptive Statistics, Growth Rates, Metric Identification', iconName: 'TrendingUp' },
-  { name: 'Stakeholder Communication', category: 'Business', level: 85, description: 'Translating raw numbers into concise business stories', iconName: 'Users' },
-  { name: 'Business Analysis', category: 'Business', level: 82, description: 'Problem Solving, Decision Support, Process Optimization', iconName: 'Briefcase' },
+  { name: 'Python', category: 'Programming', level: 92, description: 'Pandas, NumPy, Matplotlib, Seaborn, Scikit-Learn for EDA, ML & Automation', iconName: 'Terminal' },
+  { name: 'SQL', category: 'Programming', level: 90, description: 'Complex Joins, Window Functions, CTEs, Aggregations, Performance Tuning', iconName: 'Database' },
+  { name: 'Machine Learning & Regression', category: 'Analysis', level: 86, description: 'Scikit-Learn, XGBoost, Random Forest, Feature Engineering & Sales Forecasting', iconName: 'TrendingUp' },
+  { name: 'AI & Automation Agents', category: 'Programming', level: 85, description: 'Telegram Bot API, Asyncio, LLM Prompt Engineering, Web Scraping & RSS Ingestion', iconName: 'Bot' },
+  { name: 'Power BI', category: 'Visualization', level: 88, description: 'DAX Measures, Data Modeling, Power Query, KPI Executive Reports', iconName: 'BarChart2' },
+  { name: 'Excel & PivotTables', category: 'Visualization', level: 92, description: 'Dynamic Dashboards, XLOOKUP, Index/Match, Slicers, Data Cleansing', iconName: 'FileSpreadsheet' },
+  { name: 'MySQL & PostgreSQL', category: 'Databases', level: 88, description: 'Relational Database Schema Design, Query Optimization, Transactional Logs', iconName: 'HardDrive' },
+  { name: 'Data Cleaning & EDA', category: 'Analysis', level: 92, description: 'Missing value imputation, Outlier detection, Log transforms, Feature Engineering', iconName: 'Filter' },
+  { name: 'Statistical & KPI Analysis', category: 'Analysis', level: 87, description: 'Descriptive Statistics, RFM Customer Segmentation, Growth Metrics', iconName: 'Layers' },
+  { name: 'Stakeholder Communication', category: 'Business', level: 86, description: 'Translating complex quantitative patterns into actionable executive stories', iconName: 'Users' },
+  { name: 'Business Analysis', category: 'Business', level: 85, description: 'Problem Solving, Supply Chain Metrics, Decision Support, Process Optimization', iconName: 'Briefcase' },
 ];
 
 export const WORK_EXPERIENCE: Experience[] = [
@@ -164,6 +337,44 @@ export const CERTIFICATIONS: Certification[] = [
 ];
 
 export const SQL_SAMPLES: SqlSample[] = [
+  {
+    id: 'zepto-sla-performance',
+    title: 'Zepto Dark Store Delivery SLA & Speed Ranking',
+    description: 'Calculates 10-minute on-time SLA adherence %, order volume, and revenue rank across dark store hubs.',
+    sql: `WITH StoreDeliveryStats AS (
+    SELECT 
+        d.store_name,
+        d.city_zone,
+        COUNT(o.order_id) AS total_orders,
+        AVG(TIMESTAMPDIFF(MINUTE, o.order_time, o.delivery_time)) AS avg_duration_mins,
+        SUM(CASE WHEN TIMESTAMPDIFF(MINUTE, o.order_time, o.delivery_time) <= 10 THEN 1 ELSE 0 END) AS on_time_orders,
+        SUM(o.order_value_inr - o.discount_inr) AS net_gmv_inr
+    FROM zepto_orders o
+    JOIN zepto_dark_stores d ON o.dark_store_id = d.dark_store_id
+    GROUP BY d.store_name, d.city_zone
+)
+SELECT 
+    store_name,
+    city_zone,
+    total_orders,
+    ROUND(avg_duration_mins, 1) AS avg_duration_mins,
+    ROUND((on_time_orders * 100.0 / total_orders), 2) AS sla_adherence_pct,
+    ROUND(net_gmv_inr, 2) AS net_gmv_inr,
+    DENSE_RANK() OVER (ORDER BY net_gmv_inr DESC) AS revenue_rank
+FROM StoreDeliveryStats
+ORDER BY sla_adherence_pct DESC
+LIMIT 5;`,
+    result: {
+      columns: ['store_name', 'city_zone', 'total_orders', 'avg_duration_mins', 'sla_adherence_pct (%)', 'net_gmv_inr (INR)', 'revenue_rank'],
+      rows: [
+        ['Indiranagar Hub', 'Bangalore East', 18420, 8.4, 96.80, 7736400, 1],
+        ['Koramangala Hub', 'Bangalore South', 16210, 8.9, 95.40, 6808200, 2],
+        ['HSR Layout Hub', 'Bangalore South', 14850, 9.1, 94.60, 6237000, 3],
+        ['Bandra West Hub', 'Mumbai West', 15120, 9.3, 93.80, 6350400, 4],
+        ['Cyber City Hub', 'Gurugram Central', 13940, 9.6, 92.50, 5854800, 5]
+      ]
+    }
+  },
   {
     id: 'top-profitable-products',
     title: 'Top 5 Profitable Product Sub-Categories',
@@ -214,28 +425,6 @@ ORDER BY gross_revenue DESC;`,
         ['South Region', 389, 142100.00, 365.29]
       ]
     }
-  },
-  {
-    id: 'low-performing-segments',
-    title: 'Customer Segment Discount vs Profit Analysis',
-    description: 'SQL query evaluating discount impact on overall profit margins.',
-    sql: `SELECT 
-    c.segment_type,
-    AVG(s.discount) * 100 AS avg_discount_pct,
-    SUM(s.sales) AS category_sales,
-    SUM(s.profit) AS category_profit
-FROM sales_transactions s
-JOIN customers c ON s.customer_id = c.customer_id
-GROUP BY c.segment_type
-ORDER BY avg_discount_pct DESC;`,
-    result: {
-      columns: ['segment_type', 'avg_discount_pct (%)', 'category_sales ($)', 'category_profit ($)'],
-      rows: [
-        ['Consumer', 15.6, 1161401.00, 134119.00],
-        ['Corporate', 14.8, 706146.00, 91979.00],
-        ['Home Office', 14.2, 429653.00, 60298.00]
-      ]
-    }
   }
 ];
 
@@ -266,4 +455,96 @@ export const CATEGORY_BREAKDOWN = [
   { name: 'Technology', sales: 836154, profit: 145454, color: '#0284c7' },
   { name: 'Office Supplies', sales: 719047, profit: 122490, color: '#10b981' },
   { name: 'Furniture', sales: 741999, profit: 18451, color: '#f59e0b' },
+];
+
+// ZEPTO QUICK COMMERCE DATASETS
+export const ZEPTO_DARK_STORES = [
+  { id: 'indiranagar', name: 'Indiranagar Hub', city: 'Bengaluru', orders: 18420, slaRate: 96.8, avgTime: 8.4, gmv: '₹77.3L', topCategory: 'Dairy & Fresh' },
+  { id: 'koramangala', name: 'Koramangala Hub', city: 'Bengaluru', orders: 16210, slaRate: 95.4, avgTime: 8.9, gmv: '₹68.1L', topCategory: 'Snacks & Drinks' },
+  { id: 'hsr', name: 'HSR Layout Hub', city: 'Bengaluru', orders: 14850, slaRate: 94.6, avgTime: 9.1, gmv: '₹62.4L', topCategory: 'Fruits & Veggies' },
+  { id: 'bandra', name: 'Bandra West Hub', city: 'Mumbai', orders: 15120, slaRate: 93.8, avgTime: 9.3, gmv: '₹63.5L', topCategory: 'Ready to Cook' },
+  { id: 'gurugram', name: 'Cyber City Hub', city: 'Gurugram', orders: 13940, slaRate: 92.5, avgTime: 9.6, gmv: '₹58.5L', topCategory: 'Personal Care' },
+];
+
+export const ZEPTO_HOURLY_SURGE = [
+  { hour: '6 AM', orders: 120, avgMins: 7.2 },
+  { hour: '8 AM', orders: 850, avgMins: 8.1 },
+  { hour: '10 AM', orders: 1420, avgMins: 9.4 },
+  { hour: '12 PM', orders: 1100, avgMins: 8.8 },
+  { hour: '2 PM', orders: 780, avgMins: 8.0 },
+  { hour: '4 PM', orders: 950, avgMins: 8.5 },
+  { hour: '6 PM', orders: 1680, avgMins: 9.6 },
+  { hour: '8 PM', orders: 2150, avgMins: 10.2 },
+  { hour: '10 PM', orders: 1840, avgMins: 9.8 },
+  { hour: '12 AM', orders: 620, avgMins: 7.9 },
+];
+
+export const ZEPTO_CATEGORY_GMV = [
+  { name: 'Fresh Fruits & Veg', gmv: 34, color: '#10b981' },
+  { name: 'Dairy, Bread & Eggs', gmv: 28, color: '#0284c7' },
+  { name: 'Snacks & Beverages', gmv: 20, color: '#f59e0b' },
+  { name: 'Instant & Frozen Food', gmv: 11, color: '#8b5cf6' },
+  { name: 'Personal & Home Care', gmv: 7, color: '#ec4899' },
+];
+
+// SALES PREDICTION ML DATASETS
+export const ML_ACTUAL_VS_PREDICTED = [
+  { testSample: '#1', actual: 42.5, predicted: 43.1, residual: 0.6 },
+  { testSample: '#2', actual: 68.2, predicted: 67.5, residual: -0.7 },
+  { testSample: '#3', actual: 55.4, predicted: 56.1, residual: 0.7 },
+  { testSample: '#4', actual: 89.0, predicted: 87.8, residual: -1.2 },
+  { testSample: '#5', actual: 34.8, predicted: 35.2, residual: 0.4 },
+  { testSample: '#6', actual: 95.1, predicted: 94.6, residual: -0.5 },
+  { testSample: '#7', actual: 78.6, predicted: 79.4, residual: 0.8 },
+  { testSample: '#8', actual: 62.0, predicted: 61.3, residual: -0.7 },
+  { testSample: '#9', actual: 112.4, predicted: 111.8, residual: -0.6 },
+  { testSample: '#10', actual: 84.7, predicted: 85.3, residual: 0.6 },
+];
+
+export const ML_FEATURE_IMPORTANCE = [
+  { feature: 'TV Ad Spend', importance: 42.8, color: '#0284c7' },
+  { feature: 'Social Media Ads', importance: 26.5, color: '#8b5cf6' },
+  { feature: 'Store Footfall', importance: 15.2, color: '#10b981' },
+  { feature: 'Radio Promotions', importance: 9.8, color: '#f59e0b' },
+  { feature: 'Discount Margin %', importance: 5.7, color: '#ec4899' },
+];
+
+// AI NEWS TELEGRAM AGENT SAMPLES
+export const AI_AGENT_SAMPLE_DIGESTS = [
+  {
+    category: 'LLMs & Frontier Models',
+    source: 'ArXiv cs.AI • Paper #2502.1042',
+    rawHeadline: 'Deep Reasoning Scaling Laws in Test-Time Compute Models',
+    summaryBullets: [
+      '🚀 Discovers that test-time verification compute scales reasoning performance 3.4x faster than parameter pre-training alone.',
+      '💡 Enables smaller 8B models to surpass previous 70B math & coding benchmark capabilities.',
+      '🔗 Read arXiv preprint: arxiv.org/abs/2502.1042'
+    ],
+    timestamp: 'Today at 09:15 AM',
+    status: 'Delivered to @AINewsRadar (14.2k subscribers)'
+  },
+  {
+    category: 'Autonomous Agents',
+    source: 'TechCrunch AI Ingest',
+    rawHeadline: 'Open-Source Multi-Agent Framework Slashes API Latency by 40%',
+    summaryBullets: [
+      '🚀 Asynchronous message passing graph replaces sequential chain execution for autonomous developer agents.',
+      '💡 Dramatically cuts end-to-end token consumption and cost for recursive web browsing agents.',
+      '🔗 Full Article: techcrunch.com/2026/02/agents-latency'
+    ],
+    timestamp: 'Today at 12:45 PM',
+    status: 'Delivered to @AINewsRadar (14.2k subscribers)'
+  },
+  {
+    category: 'AI Hardware & Chips',
+    source: 'HackerNews Top Story',
+    rawHeadline: 'Next-Gen High-Bandwidth Memory Architecture Unleashed for Edge Inference',
+    summaryBullets: [
+      '🚀 Delivers 2.8 TB/s memory bandwidth allowing on-device 32B model execution under 15W TDP.',
+      '💡 Accelerates local robotic inference and real-time vision processing without cloud roundtrips.',
+      '🔗 Source Discussion: news.ycombinator.com/item?id=43102'
+    ],
+    timestamp: 'Today at 04:30 PM',
+    status: 'Delivered to @AINewsRadar (14.2k subscribers)'
+  }
 ];

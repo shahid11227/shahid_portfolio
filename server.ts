@@ -41,7 +41,7 @@ app.post('/api/contact', (req, res) => {
 // Resume Context for AI Assistant
 const RESUME_CONTEXT = `
 Candidate Name: Shahid Ahmad Sheer Gojree
-Role: Data Analyst
+Role: Data Analyst | Machine Learning & Automation
 Contact: +91 8899664652 | shahidgojree880@gmail.com
 LinkedIn: https://linkedin.com/in/shahid-gojree-082857389
 GitHub: https://github.com/shahid11227
@@ -51,33 +51,45 @@ Education:
 2. Data Science Certification (Python, SQL, Power BI, ML, AI) — ILS Institutions, Srinagar, J&K, India | Aug 2025 – Present
 
 Skill Summary:
-- Programming & Libraries: Python (Pandas, NumPy, Matplotlib, Seaborn), SQL
-- Data Visualization: Power BI, Excel (Pivot Tables, Charts, Dashboards)
-- Database Management: MySQL, SQL Server
-- Data Analysis: Data Cleaning, EDA (Exploratory Data Analysis), Data Transformation
+- Programming & ML: Python (Pandas, NumPy, Matplotlib, Seaborn, Scikit-Learn, XGBoost), SQL
+- Data Visualization: Power BI (DAX, Data Modeling, Power Query), Excel (Pivot Tables, Dynamic Dashboards, XLOOKUP)
+- AI & Automation: Telegram Bot API, Asyncio, LLM Prompt Engineering, Web Scraping & Ingestion
+- Database Management: MySQL, PostgreSQL, SQL Server (CTEs, Window Functions, Complex Joins)
+- Data Analysis: Data Cleaning, EDA (Exploratory Data Analysis), Feature Engineering, RFM Customer Segmentation, Regression Modeling
 - Analytical Skills: Data Interpretation, Problem Solving, Statistical Analysis, KPI & Metrics Analysis
-- Business Skills: Business Analysis, Stakeholder Communication, Decision-Making Support
+- Business Skills: Business Analysis, Supply Chain Logistics, Stakeholder Communication, Decision Support
 
 Work Experience:
 - Data Analyst Trainee at ILS Institution, Srinagar, J&K, India (Aug 2025 – Jan 2026)
   • Analyzed datasets using Python, SQL, and Excel to identify trends and support business decisions.
-  • Performed EDA and wrote SQL queries (Joins, Aggregations, Subqueries) to extract and analyze data.
+  • Performed EDA and wrote SQL queries (Joins, Aggregations, Subqueries, Window Functions) to extract and analyze data.
   • Built Excel dashboards using Pivot Tables and charts to track key performance metrics.
   • Created Power BI dashboards with KPI metrics and basic DAX measures for data-driven insights.
 
-Projects:
-1. Super Store Analysis (Python):
-   • Conducted EDA on retail data using Python (Pandas, Matplotlib) to uncover key sales and profit trends.
-   • Analyzed regions, categories, and customer segments to identify high- and low-performing products.
-   • Generated actionable insights by highlighting profit improvement opportunities and region-wise performance.
-2. Sales Dashboard (Power BI):
-   • Designed an interactive Power BI dashboard to track key sales KPIs and performance metrics.
-   • Analyzed sales trends and category performance to identify business opportunities.
-   • Delivered actionable insights through clear and visually optimized data visualizations.
-3. E-Commerce Sales Performance Dashboard (Excel):
-   • Developed a dynamic Excel dashboard to track sales performance, profit margin, and key business metrics.
-   • Utilized advanced Excel functions and PivotTables for data analysis and YoY growth calculation.
-   • Created interactive visualizations including charts and maps to analyze sales trends and regional performance.
+Featured Projects (6 Total):
+1. Zepto Quick Commerce SQL Analytics (SQL & Logistics Analytics)
+   • Repository: https://github.com/shahid11227/zepto-quick-commerce-sql-analytics
+   • Analyzed 125,000+ grocery quick-commerce delivery logs across 15 hyperlocal dark store hubs.
+   • Evaluated 10-minute delivery SLA adherence (94.2% overall), identified bottleneck peak hours, and performed RFM customer segmentation.
+   • Engineered inventory forecasting query reducing fresh produce stockouts by 24%.
+
+2. AI News Telegram Agent (Python & LLM Automation)
+   • Repository: https://github.com/shahid11227/ai-news-telegram-agent
+   • Built an automated AI intelligence bot scraping ArXiv, TechCrunch, and HackerNews RSS feeds (500+ articles/day).
+   • Implemented vector deduplication (85% noise reduction) and LLM prompt pipelines generating 3-bullet executive digests dispatched via Telegram.
+
+3. Retail Sales & Revenue Prediction (Machine Learning & Forecasting)
+   • Repository: https://github.com/shahid11227/Sales_prediction
+   • Built a supervised regression model (Random Forest / XGBoost) predicting retail revenue from TV, Social, and Radio advertising spend with 94.8% R² score and 4.2% MAE.
+
+4. Super Store Analysis (Python & EDA)
+   • Conducted exploratory data analysis on retail store data using Python (Pandas, Seaborn) across 4 regions and 3 customer segments.
+
+5. Sales Dashboard (Power BI & DAX)
+   • Built interactive KPI tracking dashboard with custom DAX measures for YoY sales growth, AOV, and margin breakdown.
+
+6. E-Commerce Sales Performance Dashboard (Excel & PivotTables)
+   • Built automated Excel dashboard with PivotTables, Slicers, and dynamic lookup formulas.
 
 Certificates:
 - Data Analysis Trainee Program — ILS Institutions (Hands-on experience in core Data Analysis, Python, SQL, Excel, Power BI, DAX, currently training in Machine Learning & AI).
@@ -97,7 +109,7 @@ app.post('/api/ai-chat', async (req, res) => {
       const ai = new GoogleGenAI({ apiKey });
       const systemInstruction = `You are Shahid Ahmad Sheer Gojree's AI Career & Data Assistant on his portfolio website.
 Answer questions accurately, professionally, and concisely based on Shahid's resume and qualifications below.
-If asked about hiring Shahid, highlight his strong analytical foundation in Python, SQL, Power BI, Excel, and Machine Learning.
+If asked about hiring Shahid, highlight his strong analytical foundation in Python, SQL, Machine Learning, AI Agents, Power BI, and Excel.
 Keep responses concise, engaging, and structured with bullet points or short paragraphs.
 
 ${RESUME_CONTEXT}`;
@@ -118,21 +130,41 @@ ${RESUME_CONTEXT}`;
 
   // Smart fallback response if API Key is not set or fails
   const lower = prompt.toLowerCase();
-  let fallbackReply = `Shahid Ahmad Sheer Gojree is a Data Analyst proficient in Python (Pandas, NumPy, Matplotlib, Seaborn), SQL (MySQL, SQL Server), Power BI, and Excel. He is currently pursuing his BCA at Lovely Professional University and holds a Data Science Certification from ILS Institutions.`;
+  let fallbackReply = `Shahid Ahmad Sheer Gojree is a Data Analyst skilled in Python (Pandas, Scikit-Learn), SQL (CTEs, Window Functions), Machine Learning, AI Telegram Agents, Power BI (DAX), and Excel. He is pursuing BCA at Lovely Professional University and holds a Data Science Certification from ILS Institutions.`;
 
-  if (lower.includes('project') || lower.includes('super store') || lower.includes('sales')) {
-    fallbackReply = `Shahid has completed 3 key data analytics projects:
-1. **Super Store Analysis (Python)**: Conducted EDA on retail data to uncover sales & profit trends across regions and categories.
-2. **Sales Dashboard (Power BI)**: Built interactive KPI tracking and category performance dashboards using DAX measures.
-3. **E-Commerce Sales Performance Dashboard (Excel)**: Created dynamic PivotTable dashboards with YoY growth calculation and profit margin tracking.`;
+  if (lower.includes('zepto') || lower.includes('quick commerce') || lower.includes('sla')) {
+    fallbackReply = `**Zepto Quick Commerce SQL Analytics**:
+• Analyzed 125,000+ quick-commerce delivery logs across 15 hyperlocal dark stores.
+• Assessed 10-minute delivery SLA adherence (94.2% rate) and peak hourly surges.
+• Performed RFM customer segmentation and engineered an inventory restocking query reducing stockouts by 24%.
+• GitHub: github.com/shahid11227/zepto-quick-commerce-sql-analytics`;
+  } else if (lower.includes('telegram') || lower.includes('ai news') || lower.includes('agent') || lower.includes('bot')) {
+    fallbackReply = `**AI News Telegram Agent**:
+• Automated end-to-end Python AI agent that ingests 500+ daily articles from ArXiv, TechCrunch, and HackerNews.
+• Implemented semantic vector deduplication (85% noise reduction) and LLM prompt pipelines generating 3-bullet executive digests.
+• Dispatches daily automated Telegram channel broadcasts with 99.9% uptime.
+• GitHub: github.com/shahid11227/ai-news-telegram-agent`;
+  } else if (lower.includes('prediction') || lower.includes('ml') || lower.includes('machine learning') || lower.includes('sales_prediction')) {
+    fallbackReply = `**Retail Sales & Revenue Prediction (Machine Learning)**:
+• Developed supervised regression models (Random Forest, XGBoost) forecasting sales revenue based on advertising investments (TV, Social Media, Radio).
+• Engineered lag features, rolling moving averages, and achieved a 94.8% R² score with 4.2% Mean Absolute Error (MAE).
+• GitHub: github.com/shahid11227/Sales_prediction`;
+  } else if (lower.includes('project') || lower.includes('projects') || lower.includes('github')) {
+    fallbackReply = `Shahid has built 6 featured projects in Data Analytics, ML & AI:
+1. **Zepto Quick Commerce SQL Analytics**: 125k+ orders analyzed, 10-min SLA adherence, RFM segmentation.
+2. **AI News Telegram Agent**: LLM news ingestion, semantic deduplication, automated Telegram bot.
+3. **Retail Sales Prediction (ML)**: Supervised regression forecasting with 94.8% R² accuracy.
+4. **Super Store Analysis (Python)**: Retail EDA identifying profit margin leaks across 4 regions.
+5. **Sales Performance Dashboard (Power BI)**: Executive KPI tracking with dynamic DAX measures.
+6. **E-Commerce Sales Dashboard (Excel)**: PivotTable analytics with automated lookup formulas.`;
   } else if (lower.includes('skill') || lower.includes('tools') || lower.includes('python') || lower.includes('sql')) {
-    fallbackReply = `Shahid's Core Technical Toolkit:
-• **Programming & Analysis**: Python (Pandas, NumPy, Matplotlib, Seaborn), SQL (Joins, Aggregations, Subqueries)
-• **Visualization**: Power BI (DAX, KPI Dashboards), Advanced Excel (PivotTables, Dynamic Formulas)
-• **Databases**: MySQL, SQL Server
-• **Business Acumen**: EDA, KPI Analysis, Stakeholder Communication & Decision Support`;
+    fallbackReply = `Shahid's Core Technical Arsenal:
+• **Programming & ML**: Python (Pandas, NumPy, Scikit-Learn, XGBoost), SQL (MySQL, PostgreSQL, CTEs, Window Functions)
+• **AI & Automation**: Telegram Bot API, Asyncio, LLM Prompt Engineering, Web Scraping
+• **Visualization**: Power BI (DAX, Data Modeling), Excel (PivotTables, Dynamic Dashboards)
+• **Business Analysis**: EDA, RFM Segmentation, KPI Tracking, Stakeholder Communication`;
   } else if (lower.includes('contact') || lower.includes('hire') || lower.includes('email') || lower.includes('phone')) {
-    fallbackReply = `You can connect with Shahid directly:
+    fallbackReply = `You can reach Shahid directly:
 • **Email**: shahidgojree880@gmail.com
 • **Phone**: +91 8899664652
 • **LinkedIn**: linkedin.com/in/shahid-gojree-082857389
@@ -140,7 +172,7 @@ ${RESUME_CONTEXT}`;
   } else if (lower.includes('education') || lower.includes('degree') || lower.includes('university')) {
     fallbackReply = `Shahid's Education & Credentials:
 1. **Bachelor of Computer Applications (BCA)** — Lovely Professional University (LPU), Punjab, India (June 2026 - Ongoing)
-2. **Data Science Certification** — ILS Institutions, Srinagar (Aug 2025 - Present) covering Python, SQL, Power BI, ML & AI.`;
+2. **Data Science Certification** — ILS Institutions, Srinagar (Aug 2025 - Present) covering Python, SQL, ML, Power BI & AI.`;
   }
 
   return res.json({ reply: fallbackReply });
