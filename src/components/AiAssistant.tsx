@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, User, Sparkles, RefreshCw, MessageSquare, Trash2 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { ChatMessage } from '../types';
+import { generateCareerAnswer } from '../utils/aiCareerKnowledge';
 
 interface AiAssistantProps {
   isOpen: boolean;
@@ -65,37 +66,45 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({ isOpen, onClose }) => 
     if (!promptText) setInputPrompt('');
     setIsLoading(true);
 
+    let aiReplyText = '';
+
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
+
       const res = await fetch('/api/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: textToSend })
+        body: JSON.stringify({ prompt: textToSend.trim() }),
+        signal: controller.signal
       });
-      const data = await res.json();
 
-      const aiReplyText = data.reply || "I am ready to share details regarding Shahid's qualifications and data analytics experience.";
+      clearTimeout(timeoutId);
 
-      const aiMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        sender: 'assistant',
-        text: aiReplyText,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      setMessages((prev) => [...prev, aiMsg]);
-    } catch (err) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          sender: 'assistant',
-          text: "Shahid Ahmad Sheer Gojree is a Data Analyst skilled in Python, SQL, Power BI, and Excel. You can contact him directly at shahidgojree880@gmail.com or +91 8899664652.",
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.reply && typeof data.reply === 'string' && data.reply.trim().length > 0) {
+          aiReplyText = data.reply;
         }
-      ]);
-    } finally {
-      setIsLoading(false);
+      }
+    } catch {
+      // Network interruption, phone offline, slow cellular or static host fallback
     }
+
+    // If server was unreachable, timed out, or in static preview mode on phone
+    if (!aiReplyText) {
+      aiReplyText = generateCareerAnswer(textToSend);
+    }
+
+    const aiMsg: ChatMessage = {
+      id: (Date.now() + 1).toString(),
+      sender: 'assistant',
+      text: aiReplyText,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    setMessages((prev) => [...prev, aiMsg]);
+    setIsLoading(false);
   };
 
   return (
