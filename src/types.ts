@@ -55,6 +55,8 @@ export interface Education {
 export interface Certification {
   title: string;
   issuer: string;
+  period?: string;
+  credentialId?: string;
   details: string[];
 }
 

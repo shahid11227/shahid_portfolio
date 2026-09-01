@@ -368,24 +368,27 @@ export const EDUCATION_DATA: Education[] = [
     location: 'Punjab, India',
     period: 'June 2026 – Ongoing',
     details: 'Focusing on computer application fundamentals, programming logic, data structures, and database management systems.'
-  },
-  {
-    degree: 'Data Science Certification',
-    institution: 'ILS Institutions',
-    location: 'Srinagar, J&K, India',
-    period: 'Aug 2025 – Present',
-    details: 'Comprehensive training in Python, SQL, Power BI, Machine Learning fundamentals, AI techniques, and business analytics.'
   }
 ];
 
 export const CERTIFICATIONS: Certification[] = [
   {
-    title: 'Data Analysis Trainee Program',
-    issuer: 'ILS Institutions',
+    title: 'Data Science Certification (Python, SQL, Power BI, ML, AI)',
+    issuer: 'ILS Institutions, Srinagar, J&K',
+    period: 'Aug 2025 – Present',
     details: [
-      'Gained intensive hands-on experience in core data analytics methodologies.',
-      'Applied Python, SQL, Excel, and Power BI to analyze real-world datasets and construct KPI dashboards.',
-      'Demonstrated strong analytical problem-solving; currently continuing advanced training in Machine Learning & AI.'
+      'Comprehensive hands-on training across Python, SQL, Power BI, Machine Learning fundamentals, and AI techniques.',
+      'Constructed end-to-end data pipelines, exploratory data analysis, KPI dashboards, and predictive machine learning models.'
+    ]
+  },
+  {
+    title: 'Google Data Analytics Capstone: Complete a Case Study',
+    issuer: 'Google',
+    credentialId: 'S6Q9IYCNTIX9',
+    details: [
+      'Demonstrated end-to-end data analytics competency following Google’s data analysis framework (Ask, Prepare, Process, Analyze, Share, Act).',
+      'Completed a rigorous business case study with data cleansing, SQL transformations, statistical analysis, and executive visualization.',
+      'Verified Google Credential ID: S6Q9IYCNTIX9'
     ]
   }
 ];

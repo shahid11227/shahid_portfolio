@@ -24,7 +24,6 @@ LinkedIn: ${PERSONAL_INFO.linkedin} | GitHub: ${PERSONAL_INFO.github}
 
 EDUCATION
 • Bachelor of Computer Applications (BCA) — Lovely Professional University (LPU), Punjab, India | June 2026 – Ongoing
-• Data Science Certification (Python, SQL, Power BI, ML, AI) — ILS Institutions, Srinagar, J&K, India | Aug 2025 – Present
 
 SKILL SUMMARY
 • Programming & ML: Python (Pandas, NumPy, Matplotlib, Seaborn, Scikit-Learn, XGBoost), SQL
@@ -68,9 +67,9 @@ KEY PROJECTS
 6. E-Commerce Sales Performance Dashboard (Excel & PivotTables)
 • Developed an automated Excel dashboard leveraging PivotTables, Slicers, and advanced lookup formulas.
 
-CERTIFICATES
-Data Analysis Trainee Program — ILS Institutions
-• Completed intensive hands-on training in core Data Analysis, Python, SQL, Excel, Power BI, DAX, Machine Learning, and AI.
+CERTIFICATES & PROGRAMS
+• Data Science Certification (Python, SQL, Power BI, ML, AI) — ILS Institutions, Srinagar, J&K | Aug 2025 – Present
+• Google Data Analytics Capstone: Complete a Case Study — Google | Credential ID: S6Q9IYCNTIX9
   `;
 
   const handleCopyText = () => {

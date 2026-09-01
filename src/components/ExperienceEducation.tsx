@@ -136,16 +136,31 @@ export const ExperienceEducation: React.FC = () => {
             <div className="space-y-4">
               {CERTIFICATIONS.map((cert, idx) => (
                 <div key={idx} className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
-                  <div>
-                    <h4 className="text-lg font-bold text-slate-900 dark:text-white">
-                      {cert.title}
-                    </h4>
-                    <p className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                      {cert.issuer}
-                    </p>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="space-y-0.5">
+                      <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                        {cert.title}
+                      </h4>
+                      <p className="text-sm font-semibold text-amber-600 dark:text-amber-400">
+                        {cert.issuer}
+                      </p>
+                    </div>
+
+                    {cert.period && (
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/80">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {cert.period}
+                      </span>
+                    )}
+
+                    {cert.credentialId && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/80">
+                        ID: {cert.credentialId}
+                      </span>
+                    )}
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800/60">
                     {cert.details.map((d, dIdx) => (
                       <div key={dIdx} className="flex items-start gap-2">
                         <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />

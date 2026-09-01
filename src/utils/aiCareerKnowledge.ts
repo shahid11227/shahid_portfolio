@@ -149,18 +149,23 @@ Shahid possesses strong SQL querying and relational schema engineering skills:
   }
 
   // 9. Education & Background
-  if (q.includes('education') || q.includes('degree') || q.includes('college') || q.includes('university') || q.includes('lpu') || q.includes('ils') || q.includes('study') || q.includes('qualif')) {
-    return `### 🎓 **Shahid's Education & Credentials**
+  if (q.includes('education') || q.includes('degree') || q.includes('college') || q.includes('university') || q.includes('lpu') || q.includes('study') || q.includes('qualif') || q.includes('certif') || q.includes('google') || q.includes('capstone')) {
+    return `### 🎓 **Shahid's Education & Certifications**
 
 1. **Bachelor of Computer Applications (BCA)**
    - **Institution**: Lovely Professional University (LPU), Punjab, India
    - **Timeline**: June 2026 – Ongoing
    - **Focus**: Computer Science fundamentals, database design, software engineering, and data structures.
 
-2. **Data Science Certification**
+2. **Data Science Certification (Python, SQL, Power BI, ML, AI)**
    - **Institution**: ILS Institutions, Srinagar, J&K
    - **Timeline**: Aug 2025 – Present
-   - **Curriculum**: Intensive hands-on training in Python, SQL, Power BI, Advanced Excel, Statistics, and Machine Learning.`;
+   - **Curriculum**: Intensive hands-on training in Python, SQL, Power BI, Machine Learning fundamentals, AI techniques, and business analytics.
+
+3. **Google Data Analytics Capstone: Complete a Case Study**
+   - **Issuer**: Google
+   - **Credential ID**: \`S6Q9IYCNTIX9\`
+   - **Key Competencies**: End-to-end data analysis lifecycle (Ask, Prepare, Process, Analyze, Share, Act), data cleansing, SQL transformations, and executive storytelling.`;
   }
 
   // 10. Work Experience

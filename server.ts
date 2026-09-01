@@ -1,10 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
@@ -47,8 +43,7 @@ LinkedIn: https://linkedin.com/in/shahid-gojree-082857389
 GitHub: https://github.com/shahid11227
 
 Education:
-1. Bachelor of Computer Applications (BCA) — Lovely Professional University (LPU), Punjab, India | June 2026 – Ongoing
-2. Data Science Certification (Python, SQL, Power BI, ML, AI) — ILS Institutions, Srinagar, J&K, India | Aug 2025 – Present
+- Bachelor of Computer Applications (BCA) — Lovely Professional University (LPU), Punjab, India | June 2026 – Ongoing
 
 Skill Summary:
 - Programming & ML: Python (Pandas, NumPy, Matplotlib, Seaborn, Scikit-Learn, XGBoost), SQL
@@ -91,8 +86,9 @@ Featured Projects (6 Total):
 6. E-Commerce Sales Performance Dashboard (Excel & PivotTables)
    • Built automated Excel dashboard with PivotTables, Slicers, and dynamic lookup formulas.
 
-Certificates:
-- Data Analysis Trainee Program — ILS Institutions (Hands-on experience in core Data Analysis, Python, SQL, Excel, Power BI, DAX, currently training in Machine Learning & AI).
+Certifications & Programs:
+- Data Science Certification (Python, SQL, Power BI, ML, AI) — ILS Institutions, Srinagar, J&K (Aug 2025 – Present).
+- Google Data Analytics Capstone: Complete a Case Study — Google (Credential ID: S6Q9IYCNTIX9).
 `;
 
 // API: AI Assistant for Resume & Data Queries
