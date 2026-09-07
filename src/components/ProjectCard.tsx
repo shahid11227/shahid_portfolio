@@ -32,7 +32,6 @@ import {
   Sliders,
   Send,
   Radio,
-  Clock,
   Truck,
   TrendingUp,
   TrendingDown,
@@ -133,6 +132,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             }`}>
               {project.category}
             </span>
+
+            {project.isOptional && (
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700">
+                Optional Project
+              </span>
+            )}
 
             {project.githubUrl && (
               <a
@@ -254,7 +259,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           )}
         </div>
 
-        {/* Enhanced Project KPI Metrics Grid */}
+        {/* Project KPI Metrics Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mt-5">
           {project.metrics.map((m, idx) => (
             <div 

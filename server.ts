@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { GoogleGenAI } from '@google/genai';
 
 const app = express();
@@ -13,6 +14,22 @@ const contactSubmissions: Array<{ id: string; name: string; email: string; messa
 // API: Health Check
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// API: Resume PDF Download Endpoint
+app.get(['/api/resume/download', '/Shahid_Resume.pdf'], (_req, res) => {
+  const publicPdf = path.join(process.cwd(), 'public', 'Shahid_Resume.pdf');
+  const distPdf = path.join(process.cwd(), 'dist', 'Shahid_Resume.pdf');
+
+  const targetPath = fs.existsSync(publicPdf) ? publicPdf : fs.existsSync(distPdf) ? distPdf : null;
+
+  if (targetPath) {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="Shahid_Resume.pdf"');
+    return res.sendFile(targetPath);
+  } else {
+    return res.status(404).json({ error: 'Resume PDF file not found.' });
+  }
 });
 
 // API: Contact Submission

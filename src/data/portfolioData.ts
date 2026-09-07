@@ -10,7 +10,7 @@ export const PERSONAL_INFO = {
   github: 'https://github.com/shahid11227',
   githubUsername: 'shahid11227',
   location: 'Srinagar, J&K / LPU Punjab, India',
-  about: 'Detail-oriented Data Analyst experienced in Python, SQL, Power BI, and Excel. Passionate about uncovering hidden business trends, building interactive KPI dashboards, machine learning forecasting, and developing intelligent automation agents.',
+  about: 'Detail-oriented Data Analyst experienced in Python, SQL, Power BI, and Excel. Passionate about uncovering hidden business trends, building interactive KPI dashboards, exploratory data analysis, and translating data into actionable executive decisions.',
 };
 
 export const PROJECTS_DATA: Project[] = [
@@ -81,7 +81,8 @@ ORDER BY sla_adherence_pct DESC;`,
     title: 'AI News Telegram Agent',
     subtitle: 'Automated LLM Ingestion, Deduplication & Scheduled Broadcast Bot',
     category: 'AI & Automation',
-    impactBadge: 'Autonomous Pipeline • 85% Noise Filtered • 99.9% Uptime',
+    isOptional: true,
+    impactBadge: 'Optional Project • Autonomous Pipeline • 99.9% Uptime',
     summary: 'Engineered an automated end-to-end AI intelligence agent that ingests breaking artificial intelligence news from ArXiv, TechCrunch, and HackerNews. Uses LLM prompt pipelines to generate 3-bullet executive digests and broadcasts daily updates to Telegram subscribers.',
     highlights: [
       'Constructed an asynchronous ingestion pipeline scraping RSS feeds and tech APIs, processing 500+ articles daily.',
@@ -155,7 +156,8 @@ async def process_and_broadcast_ai_news():
     title: 'Retail Sales & Revenue Prediction',
     subtitle: 'Supervised Regression Modeling, Feature Engineering & Forecasting',
     category: 'Machine Learning',
-    impactBadge: '94.8% R² Score • 4.2% MAE Precision • Multi-Channel Spend Modeling',
+    isOptional: true,
+    impactBadge: 'Optional Project • 94.8% R² Score • Multi-Channel Spend Modeling',
     summary: 'Built a predictive machine learning model to forecast multi-channel retail sales based on advertising investments (TV, Radio, Social Media), store seasonality, and historical demand trends, achieving an R² score of 94.8%.',
     highlights: [
       'Conducted comprehensive data preprocessing: missing value imputation, IQR outlier detection, and log feature transformations.',

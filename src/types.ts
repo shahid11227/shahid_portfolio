@@ -3,6 +3,7 @@ export interface Project {
   title: string;
   subtitle: string;
   category: 'Python' | 'Power BI' | 'Excel' | 'SQL & Analytics' | 'AI & Automation' | 'Machine Learning';
+  isOptional?: boolean;
   summary: string;
   highlights: string[];
   tools: string[];
