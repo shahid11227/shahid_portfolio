@@ -27,7 +27,10 @@ interface ResumeModalProps {
   onClose: () => void;
 }
 
-const RESUME_PDF_URL = '/Shahid_Resume.pdf';
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const RESUME_PDF_URL = `${baseUrl}Shahid_Resume.pdf`;
 const RESUME_FILENAME = 'Shahid_Resume.pdf';
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
@@ -36,25 +39,45 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
 
   if (!isOpen) return null;
 
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
     try {
       setDownloadStatus('downloading');
 
-      // Native programmatic download trigger for maximal browser compatibility
+      // Fetch the actual PDF as blob to ensure cross-origin/iframe download compatibility
+      const response = await fetch(RESUME_PDF_URL);
+      if (response.ok) {
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = RESUME_FILENAME;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      } else {
+        const link = document.createElement('a');
+        link.href = RESUME_PDF_URL;
+        link.setAttribute('download', RESUME_FILENAME);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      setTimeout(() => {
+        setDownloadStatus('success');
+        setTimeout(() => setDownloadStatus('idle'), 3000);
+      }, 500);
+    } catch {
       const link = document.createElement('a');
       link.href = RESUME_PDF_URL;
       link.setAttribute('download', RESUME_FILENAME);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-      setTimeout(() => {
-        setDownloadStatus('success');
-        setTimeout(() => setDownloadStatus('idle'), 3000);
-      }, 600);
-    } catch (err) {
-      console.error('Direct download error, falling back to window.open', err);
-      window.open(RESUME_PDF_URL, '_blank');
       setDownloadStatus('idle');
     }
   };

@@ -1,10 +1,22 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import cors from 'cors';
 import { GoogleGenAI } from '@google/genai';
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors({
+  origin: [
+    'https://shahid11227.github.io',
+    'https://shahid-portfolio-five.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
 

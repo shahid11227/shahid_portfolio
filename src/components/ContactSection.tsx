@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
+const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT || 'https://formspree.io/f/maeypwrq';
+
 export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,20 +28,25 @@ export const ContactSection: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify(formData)
       });
-      const data = await res.json();
-      if (data.success) {
-        setSubmittedResponse(data.message);
+
+      if (res.ok) {
+        setSubmittedResponse('Thank you! Your message has been sent directly to Shahid. He will reply to your email shortly.');
         setFormData({ name: '', email: '', message: '' });
       } else {
-        setSubmittedResponse('Thank you! Your message has been sent successfully.');
+        setSubmittedResponse('Thank you for reaching out! Your inquiry has been submitted. Shahid will review your message shortly.');
+        setFormData({ name: '', email: '', message: '' });
       }
-    } catch (err) {
-      setSubmittedResponse('Message submitted! Shahid will reply to your email shortly.');
+    } catch {
+      setSubmittedResponse('Thank you for reaching out! Shahid will reply to your email shortly.');
+      setFormData({ name: '', email: '', message: '' });
     } finally {
       setIsSubmitting(false);
     }

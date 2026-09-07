@@ -9,6 +9,9 @@ interface AiAssistantProps {
   onClose: () => void;
 }
 
+const AI_SERVER_BASE_URL = 'https://shahid-portfolio-five.vercel.app';
+const AI_CHAT_ENDPOINT = `${AI_SERVER_BASE_URL}/api/ai-chat`;
+
 const SUGGESTED_PROMPTS = [
   "Tell me about Shahid's Zepto Quick Commerce SQL project",
   "How does Shahid's AI News Telegram Agent work?",
@@ -70,23 +73,35 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({ isOpen, onClose }) => 
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-      const res = await fetch('/api/ai-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: textToSend.trim() }),
-        signal: controller.signal
-      });
+      // Determine endpoints to try based on environment
+      const isGitHubPages = typeof window !== 'undefined' && window.location.hostname.includes('github.io');
+      const candidates = isGitHubPages 
+        ? [AI_CHAT_ENDPOINT, '/api/ai-chat'] 
+        : ['/api/ai-chat', AI_CHAT_ENDPOINT];
 
-      clearTimeout(timeoutId);
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.reply && typeof data.reply === 'string' && data.reply.trim().length > 0) {
-          aiReplyText = data.reply;
+      for (const endpoint of candidates) {
+        try {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: textToSend.trim() }),
+            signal: controller.signal
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.reply && typeof data.reply === 'string' && data.reply.trim().length > 0) {
+              aiReplyText = data.reply;
+              break;
+            }
+          }
+        } catch {
+          // Attempt next candidate endpoint
         }
       }
+
+      clearTimeout(timeoutId);
     } catch {
       // Network interruption, phone offline, slow cellular or static host fallback
     }
